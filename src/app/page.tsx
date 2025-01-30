@@ -6,57 +6,63 @@ function Home() {
   const [text, setText] = useState("");
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [language, setLanguage] = useState("en-us");  // Default language
-  const [voiceType, setVoiceType] = useState("male"); // Default voice type
+  const [language, setLanguage] = useState("en-us");
+  const [voiceType, setVoiceType] = useState("male");
 
-  // Handle changes to textarea input
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
   };
 
-  // Handle changes to language selection
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLanguage(e.target.value);
   };
 
-  // Handle changes to voice selection (male/female)
   const handleVoiceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setVoiceType(e.target.value);
   };
 
-  // Generate speech based on the selected options
   const handleGenerateSpeech = async () => {
     if (!text.trim()) return;
 
     setIsLoading(true);
 
-    // Fetch the new audio for the updated text, language, and voice
     const audio = await getVoiceRSSAudio(text, language, voiceType);
     setIsLoading(false);
 
-    // Update the audio URL only if the audio is successfully generated
     if (audio) {
       setAudioUrl(audio);
     }
   };
 
   useEffect(() => {
-    // Reset the audio URL when the text changes
     setAudioUrl(null);
-  }, [text]);  // This effect runs every time the text changes
+  }, [text, language, voiceType]);
+
 
   return (
     <div className="">
       <div className="flex justify-center items-center">
         <div className="bg-[#1C1C1C] border-[#262626] border-[1px] w-[80%] py-1 px-6 rounded-[30px] my-4 flex items-center justify-between">
           <svg xmlns="http://www.w3.org/2000/svg" width="30" height="50" viewBox="0 0 100 120">
-            <polygon points="50,5 95,30 95,90 50,115 5,90 5,30" stroke="#fff" stroke-width="8"
-              fill="none" />
-            <text x="50" y="65" text-anchor="middle" fill="#fff"
-              font-family="'Roboto Mono', monospace" font-size="50" dy=".3em">
+            <polygon
+              points="50,5 95,30 95,90 50,115 5,90 5,30"
+              stroke="#fff"
+              strokeWidth="8"
+              fill="none"
+            />
+            <text
+              x="50"
+              y="65"
+              textAnchor="middle"
+              fill="#fff"
+              fontFamily="'Roboto Mono', monospace"
+              fontSize="50"
+              dy=".3em"
+            >
               V
             </text>
           </svg>
+
           <h1 className="text-white tracking-[2px] font-[600]">Voicify</h1>
         </div>
       </div>
@@ -73,7 +79,6 @@ function Home() {
               value={text}
               onChange={handleTextChange}
             />
-            {/* Language Selection */}
             <div className="mt-4">
               <label className="mr-2">Language:</label>
               <select
@@ -87,11 +92,8 @@ function Home() {
                 <option value="fr-fr">French</option>
                 <option value="de-de">German</option>
                 <option value="it-it">Italian</option>
-                {/* Add more languages as needed */}
               </select>
             </div>
-
-            {/* Voice Type Selection */}
             <div className="mt-4">
               <label className="mr-2">Voice:</label>
               <select
@@ -103,8 +105,6 @@ function Home() {
                 <option value="female">Female</option>
               </select>
             </div>
-
-            {/* Generate Speech Button */}
             <button
               className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-md"
               onClick={handleGenerateSpeech}
