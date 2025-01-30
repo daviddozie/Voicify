@@ -1,21 +1,34 @@
 import "./globals.css";
-import { Poppins } from 'next/font/google';
+import { Roboto_Mono } from "next/font/google";
+import { ThemeProvider } from "@/components/theme-provider";
 
-const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['400', '600'], // Choose the weights you need
-  style: ['normal', 'italic'],
-  display: 'swap',
+const roboto = Roboto_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  display: "swap",
 });
+
+export const metadata = {
+  title: "Voicify",
+  description: "Your app description goes here",
+};
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <body className={`bg-[#191919] ${poppins.className}`}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body className={roboto.className}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
