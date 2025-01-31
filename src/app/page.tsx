@@ -14,7 +14,7 @@ import {
 import PlayIcon from "@mui/icons-material/PlayArrowRounded";
 import PauseIcon from "@mui/icons-material/PauseRounded"; // Import Pause Icon
 import { ModeToggle } from "@/components/ui/modal-toogle"; // Import ModeToggle
-import "./globals.css";
+import { Button } from "@/components/ui/button";
 
 function Home() {
   const [text, setText] = useState("");
@@ -24,6 +24,7 @@ function Home() {
   const [voiceType, setVoiceType] = useState("male");
   const [isPlaying, setIsPlaying] = useState(false); // To toggle play/pause
   const audioRef = useRef<HTMLAudioElement | null>(null); // Reference to the audio element
+  const [currentTime, setCurrentTime] = useState(0);
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
@@ -37,6 +38,25 @@ function Home() {
     setVoiceType(value); // Update the voice type state when a new voice type is selected
   };
 
+
+  const handlePlayPause = () => {
+    if (!audioUrl) return;
+
+    if (audioRef.current) {
+      if (audioRef.current.paused) {
+        audioRef.current.currentTime = currentTime; // Resume from last position
+        audioRef.current.play();
+        document.querySelector(".wave")?.classList.add("playing"); // Start animation
+        setIsPlaying(true);
+      } else {
+        setCurrentTime(audioRef.current.currentTime); // Store current time
+        audioRef.current.pause();
+        document.querySelector(".wave")?.classList.remove("playing"); // Stop animation
+        setIsPlaying(false);
+      }
+    }
+  };
+
   const handleGenerateSpeech = async () => {
     if (!text.trim()) return;
 
@@ -47,34 +67,27 @@ function Home() {
 
     if (audio) {
       setAudioUrl(audio);
-      if (audioRef.current) {
-        audioRef.current.pause(); // Pause if audio was playing previously
-        audioRef.current.currentTime = 0; // Reset to start
-        audioRef.current.src = audio; // Set the new audio URL
-        audioRef.current.play(); // Play the audio immediately after setting the src
-      }
-    }
-  };
 
-  const handlePlayPause = () => {
-    if (!audioUrl) return;
-  
-    if (isPlaying) {
-      audioRef.current?.pause();
-    } else {
       if (audioRef.current) {
+        audioRef.current.pause(); // Pause if playing
+        audioRef.current.src = audio; // Set new audio
+        audioRef.current.currentTime = 0; // Reset position only when generating new speech
         audioRef.current.play();
+        setIsPlaying(true);
+        document.querySelector(".wave")?.classList.add("playing"); // Start animation
       }
     }
-  
-    setIsPlaying((prev) => !prev); // Toggle play state
   };
-  
 
   useEffect(() => {
-    console.log("Is Playing:", isPlaying);
-  }, [isPlaying]);
-  
+    if (audioRef.current) {
+      audioRef.current.addEventListener("ended", () => {
+        setIsPlaying(false);
+        document.querySelector(".wave")?.classList.remove("playing"); // Stop animation when audio ends
+      });
+    }
+  }, []);
+
 
   useEffect(() => {
     setAudioUrl(null);
@@ -83,7 +96,7 @@ function Home() {
   return (
     <div className="container mx-auto">
       <div className="flex justify-center items-center">
-        <div className="bg-transparent border border-[#E4E4E7] shadow-sm w-[80%] py-1 px-6 rounded-[30px] my-4 flex items-center justify-between">
+        <div className="bg-transparent border border-[#E4E4E7] dark:border-[#27272A] shadow-sm w-[90%] md:w-[80%] py-1 px-6 rounded-[30px] my-4 flex items-center justify-between">
           <svg xmlns="http://www.w3.org/2000/svg" width="30" height="50" viewBox="0 0 100 120">
             <polygon
               points="50,5 95,30 95,90 50,115 5,90 5,30"
@@ -110,8 +123,8 @@ function Home() {
         </div>
       </div>
 
-      <div className="w-[80%] mx-auto">
-        <div className="w-[60%] mx-auto pt-6">
+      <div className="w-[90%] md:w-[80%] mx-auto">
+        <div className="w-[90%] md:w-[80%] lg:w-[60%] mx-auto pt-6">
           <p className="text-center font-[600] text-[14px]">
             Voicify is a simple text-to-speech web app that converts your text into natural-sounding speech.
             With customizable voices, languages, and settings, it lets you listen to any content effortlessly.
@@ -119,8 +132,8 @@ function Home() {
           </p>
         </div>
 
-        <div className="flex justify-between mt-[50px]">
-          <div className="bg-transparent border border-[#E4E4E7] p-4 rounded-[4px] w-[60%] shadow-sm">
+        <div className="flex justify-between mt-[20px] md:mt-[50px] flex-col-reverse sm:flex-row w-full pb-3 md:pb-0">
+          <div className="bg-transparent flex-grow border border-[#E4E4E7] dark:border-[#27272A] w-full p-4 rounded-[4px] md:w-[60%] shadow-sm">
             <h1 className="text-[22px] font-[800] text-center pb-3">Voicify</h1>
             <Textarea
               placeholder="Type your message here."
@@ -140,6 +153,15 @@ function Home() {
                     <SelectItem value="en-us">English (US)</SelectItem>
                     <SelectItem value="es-es">Spanish (ES)</SelectItem>
                     <SelectItem value="fr-fr">French (FR)</SelectItem>
+                    <SelectItem value="de-de">German (DE)</SelectItem>
+                    <SelectItem value="it-it">Italian (IT)</SelectItem>
+                    <SelectItem value="pt-pt">Portuguese (PT)</SelectItem>
+                    <SelectItem value="zh-cn">Chinese (Simplified)</SelectItem>
+                    <SelectItem value="ja-jp">Japanese (JP)</SelectItem>
+                    <SelectItem value="ko-kr">Korean (KR)</SelectItem>
+                    <SelectItem value="ru-ru">Russian (RU)</SelectItem>
+                    <SelectItem value="ar-sa">Arabic (SA)</SelectItem>
+                    <SelectItem value="hi-in">Hindi (IN)</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -160,25 +182,31 @@ function Home() {
                 </SelectContent>
               </Select>
             </div>
+            <div className="flex items-center justify-between">
+              <Button
+                aria-label="Generate Speech"
+                className="mt-4 bg-[#18181B] dark:bg-[#FFF] px-4 py-2 rounded-lg"
+                onClick={handleGenerateSpeech}
+                disabled={isLoading || !text.trim()}
+              >
+                {isLoading ? "Generating..." : "Generate"}
+              </Button>
+              <Button
+                aria-label={isPlaying ? "Pause Speech" : "Play Speech"}
+                className={`mt-4 ml-2 rounded-full bg-[#18181B] text-white dark:text-[#18181B] dark:bg-[#FFF] flex justify-center items-center w-10 h-10 ${!audioUrl ? "cursor-not-allowed" : ""
+                  }`}
+                onClick={handlePlayPause}
+                disabled={!audioUrl}
+              >
+                {isPlaying ? <PauseIcon /> : <PlayIcon />}
+              </Button>
 
-            {/* Single Button for Both Generating and Playing/Pausing */}
-            <button
-              aria-label={isPlaying ? "Pause Speech" : "Generate Speech"}
-              className="mt-4 rounded-[50%] bg-[#18181B] text-white flex justify-center items-center w-9 h-9"
-              onClick={isPlaying ? handlePlayPause : handleGenerateSpeech}
-              disabled={isLoading}
-            >
-              {isPlaying ? <PauseIcon className="text-[#fff]" /> : <PlayIcon className="text-[#fff]" />}
-            </button>
-
-            {/* We no longer show the audio controls, as it will play silently */}
+            </div>
             <audio ref={audioRef} />
           </div>
-          <div className="wave-wrapper">
-            <div className="wave"></div>
+          <div className="wave-wrapper w-full md:w-[40%]">
+            <div className="wave dark:bg-[#FFF]"></div>
           </div>
-
-
         </div>
       </div>
     </div>
