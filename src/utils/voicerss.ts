@@ -1,6 +1,6 @@
 export const getVoiceRSSAudio = async (text: string, language: string, voiceType: string): Promise<string | null> => {
-  
-  const API_KEY = process.env.NEXT_PUBLIC_VOICERSS_API_KEY;
+
+  const API_KEY = "941b4a923ee9426095ab767ef420c6ad";
 
   const voice = voiceType === "male" ? "Mike" : "Sally";
 
