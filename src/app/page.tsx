@@ -204,7 +204,7 @@ function Home() {
             </div>
             <audio ref={audioRef} />
           </div>
-          <div className="wave-wrapper w-full md:w-[40%]">
+          <div className="w-full md:w-[40%] h-[200px] relative mb-[20px] flex justify-center md:justify-end items-center">
             <div className="wave dark:bg-[#FFF]"></div>
           </div>
         </div>

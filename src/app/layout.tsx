@@ -11,7 +11,7 @@ const roboto = Roboto_Mono({
 
 export const metadata = {
   title: "Voicify",
-  description: "Your app description goes here",
+  description: "Voicify is a text-to-speech web app that converts text into natural-sounding speech with customizable voices and languages.",
 };
 
 export default function RootLayout({

@@ -2,15 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.wave-wrapper {
-  position: relative;
-  height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  margin-bottom: 20px;
-}
-
 .wave {
   width: 150px;
   height: 150px;
