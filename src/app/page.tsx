@@ -85,6 +85,7 @@ function Home() {
         audioRef.current.pause();
         audioRef.current.src = audio;
         audioRef.current.currentTime = 0;
+        audioRef.current.volume = 1;
         audioRef.current.play();
         setIsPlaying(true);
         document.querySelector(".wave")?.classList.add("playing");
@@ -134,7 +135,6 @@ function Home() {
           <ModeToggle />
         </div>
       </div>
-
       <div className="w-[90%] md:w-[80%] mx-auto">
         <div className="w-[90%] md:w-[80%] lg:w-[60%] mx-auto pt-6">
           <p className="text-center font-[600] text-[14px]">
@@ -152,9 +152,7 @@ function Home() {
               value={text}
               onChange={handleTextChange}
             />
-
             <div className="flex items-center pt-4">
-              {/* Language Select */}
               <Select value={language} onValueChange={handleLanguageChange}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select Language" />

@@ -1,8 +1,12 @@
 export const getVoiceRSSAudio = async (text: string, language: string, voiceType: string): Promise<string | null> => {
+  
   const API_KEY = process.env.NEXT_PUBLIC_VOICERSS_API_KEY;
+
   const voice = voiceType === "male" ? "Mike" : "Sally";
 
-  const url = `https://api.voicerss.org/?key=${API_KEY}&hl=${language}&v=${voice}&src=${encodeURIComponent(text)}&c=mp3`;
+  const url = `https://api.voicerss.org/?key=${API_KEY}&hl=${language}&v=${voice}&src=${encodeURIComponent(
+    text
+  )}&c=wav`;
 
   try {
     const response = await fetch(url);
