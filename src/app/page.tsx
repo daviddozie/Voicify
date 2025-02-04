@@ -151,10 +151,11 @@ function Home() {
               placeholder="Type your message here."
               value={text}
               onChange={handleTextChange}
+              className="dark:border-[#27272A]"
             />
             <div className="flex items-center pt-4">
               <Select value={language} onValueChange={handleLanguageChange}>
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-full dark:border-[#27272A]">
                   <SelectValue placeholder="Select Language" />
                 </SelectTrigger>
                 <SelectContent>
@@ -177,7 +178,7 @@ function Home() {
               </Select>
               <div className="px-4">|</div>
               <Select value={voiceType} onValueChange={handleVoiceChange}>
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-full dark:border-[#27272A]">
                   <SelectValue placeholder="Select Voice" />
                 </SelectTrigger>
                 <SelectContent>
@@ -192,7 +193,7 @@ function Home() {
             <div className="flex items-center justify-between">
               <Button
                 aria-label="Generate Speech"
-                className="mt-4 bg-[#18181B] dark:bg-[#FFF] px-4 py-2 rounded-lg"
+                className="mt-4 bg-[#18181B] dark:bg-[#FFF] text-white dark:text-[#18181B] px-4 py-2 rounded-[4px]"
                 onClick={handleGenerateSpeech}
                 disabled={isLoading || !text.trim()}
               >
@@ -220,7 +221,7 @@ function Home() {
             <audio ref={audioRef} />
           </div>
           <div className="w-full md:w-[40%] h-[200px] relative mb-[20px] flex justify-center md:justify-end items-center">
-            <div className="wave dark:bg-[#FFF]"></div>
+            <div className="wave dark:bg-[#FFF] bg-[#18181B] h-[150px] w-[150px] rounded-full"></div>
           </div>
         </div>
       </div>
