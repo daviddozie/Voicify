@@ -1,5 +1,7 @@
 # Voicify - Text-to-Speech Web App
 
+![Voicify Demo](./public/voicify-img.png)
+
 Voicify is a modern text-to-speech web application that allows users to convert written text into spoken words using VoiceRSS. Built with **Next.js**, it provides a fast and responsive UI for seamless user experience.
 
 ## 🚀 Features
@@ -11,8 +13,6 @@ Voicify is a modern text-to-speech web application that allows users to convert 
 
 ## 🎥 Live Demo
 Check out the live version of Voicify here: **[Voicify Live](https://voiciify.vercel.app/)**
-
-![Voicify Demo](chrome-extension://fdpohaocaechififmbbbbbknoalclacl/capture.html?id=76&url=https%3A%2F%2Fvoiciify.vercel.app%2F)
 
 ## 🛠️ Tech Stack
 - **Next.js** – React framework for SSR & performance
